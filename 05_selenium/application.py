@@ -9,7 +9,7 @@ class Application:
         if self.browser == 'chrome':
             chrome_options = Options()
             chrome_options.add_argument("--start-fullscreen")
-            chrome_options.add_argument("--headless")
+            # chrome_options.add_argument("--headless")
             self.wd = webdriver.Chrome(chrome_options=chrome_options)
         elif self.browser == 'firefox':
             self.wd = webdriver.Firefox()
@@ -21,3 +21,7 @@ class Application:
     def open_home_page(self):
         wd = self.wd
         wd.get(self.base_url)
+
+    def open_admin_panel(self):
+        wd = self.wd
+        wd.get(f"{self.base_url}/admin")
