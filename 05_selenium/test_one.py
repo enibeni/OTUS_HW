@@ -42,7 +42,7 @@ def test_admin_panel_auth_with_wrong_cred(app):
     element = app.wd.find_element_by_css_selector(AdminPage.password_input)
     element.click()
     element.send_keys("bar")
-    element.find_element_by_xpath(AdminPage.login_button)
+    element = app.wd.find_element_by_css_selector(AdminPage.login_button)
     element.click()
 
 

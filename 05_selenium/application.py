@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from locators.admin_page import AdminPage
 
 
 class Application:
@@ -19,9 +20,26 @@ class Application:
             raise ValueError(f'Unrecognized browser {browser_name}')
 
     def open_home_page(self):
+        """ Open main page
+        """
         wd = self.wd
         wd.get(self.base_url)
 
     def open_admin_panel(self):
+        """ Open admin page
+        """
         wd = self.wd
         wd.get(f"{self.base_url}/admin")
+
+    def admin_page_login(self, login, password):
+        """ Open admin login page and login
+        """
+        self.open_admin_panel()
+        element = self.wd.find_element_by_css_selector(AdminPage.username_input)
+        element.click()
+        element.send_keys(login)
+        element = self.wd.find_element_by_css_selector(AdminPage.password_input)
+        element.click()
+        element.send_keys(password)
+        element.find_element_by_xpath(AdminPage.login_button)
+        element.click()

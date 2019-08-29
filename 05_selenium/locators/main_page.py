@@ -1,4 +1,6 @@
 class MainPage:
+    """ Main page locators
+    """
     logo = "#logo > h1 > a"
     search_input = "#search > input"
     cart_button = "#cart > button"
