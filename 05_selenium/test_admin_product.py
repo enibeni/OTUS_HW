@@ -1,6 +1,6 @@
+from random import randint
 from locators.admin_main_page import AdminMainPage
 from locators.add_product_page import AddProductPage
-from random import randint
 
 
 class TestAdminProductCrud:
