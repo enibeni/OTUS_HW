@@ -1,6 +1,6 @@
 from selenium.webdriver.common.keys import Keys
 from locators.main_page import MainPage
-from locators.admin_page import AdminPage
+from locators.admin_login_page import AdminLoginPage
 from selenium.webdriver.common.action_chains import ActionChains
 
 
@@ -36,13 +36,13 @@ def test_admin_panel_auth_with_wrong_cred(app):
     """ test auth in admin panel
     """
     app.open_admin_panel()
-    element = app.wd.find_element_by_css_selector(AdminPage.username_input)
+    element = app.wd.find_element_by_css_selector(AdminLoginPage.username_input)
     element.click()
     element.send_keys("foo")
-    element = app.wd.find_element_by_css_selector(AdminPage.password_input)
+    element = app.wd.find_element_by_css_selector(AdminLoginPage.password_input)
     element.click()
     element.send_keys("bar")
-    element = app.wd.find_element_by_css_selector(AdminPage.login_button)
+    element = app.wd.find_element_by_css_selector(AdminLoginPage.login_button)
     element.click()
 
 

@@ -1,5 +1,5 @@
-class AdminPage:
-    """ Admin page locators
+class AdminLoginPage:
+    """ Admin login page locators
     """
     username_input="#input-username"
     password_input="#input-password"
