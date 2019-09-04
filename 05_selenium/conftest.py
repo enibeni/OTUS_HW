@@ -16,13 +16,20 @@ def pytest_addoption(parser):
         default="chrome",
         help="Which browser to use"
     )
+    parser.addoption(
+        "--wait",
+        action="store",
+        default="10",
+        help="Timeout to implicitly wait for an element to be found"
+    )
 
 
 @pytest.fixture(scope='session')
 def app(request):
     browser = request.config.getoption("--browser")
     base_url = request.config.getoption("--url")
-    app = Application(browser, base_url)
+    implicit_wait = request.config.getoption("--wait")
+    app = Application(browser, base_url, implicit_wait)
     app.open_home_page()
     yield app
     app.wd.quit()

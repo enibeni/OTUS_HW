@@ -1,4 +1,7 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from locators.admin_login_page import AdminLoginPage
 from locators.add_product_page import AddProductPage
@@ -7,7 +10,7 @@ from random import randint
 
 
 class Application:
-    def __init__(self, browser_name, base_url):
+    def __init__(self, browser_name, base_url, implicit_wait):
         self.browser = browser_name
         self.base_url = base_url if 'http' in base_url else f'http://{base_url}'
         if self.browser == 'chrome':
@@ -21,6 +24,8 @@ class Application:
             self.wd = webdriver.Safari()
         else:
             raise ValueError(f'Unrecognized browser {browser_name}')
+
+        self.wd.implicitly_wait(implicit_wait)
 
     def open_home_page(self):
         """ Open main page
@@ -37,8 +42,9 @@ class Application:
     def admin_page_login(self, login, password):
         """ Open admin login page and login
         """
+        wait = WebDriverWait(self.wd, 10)
         self.open_admin_panel()
-        element = self.wd.find_element_by_css_selector(AdminLoginPage.username_input)
+        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, AdminLoginPage.username_input)))
         element.click()
         element.send_keys(login)
         element = self.wd.find_element_by_css_selector(AdminLoginPage.password_input)
@@ -50,7 +56,8 @@ class Application:
     def admin_open_product_creation(self):
         """ Open product creation page
         """
-        element = self.wd.find_element_by_css_selector(AdminMainPage.catalog)
+        wait = WebDriverWait(self.wd, 10)
+        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, AdminMainPage.catalog)))
         element.click()
         element = self.wd.find_element_by_css_selector(AdminMainPage.products_menu)
         element.click()
@@ -60,13 +67,14 @@ class Application:
         :param kwargs: name, meta, model
         :return: name
         """
+        wait = WebDriverWait(self.wd, 10)
         name = kwargs.get("name", f"test_product_{randint(1, 1000)}")
         meta = kwargs.get("meta", f"test_meta_{randint(1, 1000)}")
         model = kwargs.get("model", f"test_model_{randint(1, 1000)}")
 
         element = self.wd.find_element_by_css_selector(AdminMainPage.add_product)
         element.click()
-        element = self.wd.find_element_by_css_selector(AddProductPage.product_name)
+        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, AddProductPage.product_name)))
         element.click()
         element.send_keys(name)
         element = self.wd.find_element_by_css_selector(AddProductPage.product_meta)
@@ -74,7 +82,7 @@ class Application:
         element.send_keys(meta)
         element = self.wd.find_element_by_link_text("Data")
         element.click()
-        element = self.wd.find_element_by_css_selector(AddProductPage.product_model)
+        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, AddProductPage.product_model)))
         element.click()
         element.send_keys(model)
         element = self.wd.find_element_by_css_selector(AddProductPage.save_button)
