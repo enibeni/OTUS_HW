@@ -1,13 +1,15 @@
 import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from application import Application
-from locators.admin_main_page import AdminMainPage
+from page_objects.admin_login_page import AdminLoginPageObject
 
 
 def pytest_addoption(parser):
     parser.addoption(
         "--url",
         action="store",
-        default="127.0.0.1",
+        default="http://127.0.0.1:8080/",
         help="Site url to test"
     )
     parser.addoption(
@@ -32,7 +34,7 @@ def app(request):
     app = Application(browser, base_url, implicit_wait)
     app.open_home_page()
     yield app
-    app.wd.quit()
+    app.driver.quit()
 
 
 @pytest.fixture()

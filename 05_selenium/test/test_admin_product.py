@@ -4,16 +4,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from random import randint
 from locators.admin_main_page import AdminMainPage
 from locators.add_product_page import AddProductPage
+from page_objects.admin_login_page import AdminLoginPageObject
 
 
 class TestAdminProductCrud:
     """ Test Product crud operations
     """
 
-    def test_admin_add_product_with_only_required_fields(self, app, admin_session, create_product):
+    def test_admin_add_product_with_only_required_fields(self, browser, create_product):
         """ test creation of product when only required fields are filled
         """
-        wait = WebDriverWait(app.wd, 10)
+        wait = WebDriverWait(browser.driver, 10)
+        AdminLoginPageObject(browser).admin_page_login(login="user", password="bitnami1")
         element = wait.until(EC.element_to_be_clickable((By.XPATH, AdminMainPage.success_alert)))
         assert str(element.text).startswith("Success: You have modified products!")
 
