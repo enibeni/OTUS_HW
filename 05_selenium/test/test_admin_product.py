@@ -1,55 +1,43 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import pytest
 from random import randint
-from locators.admin_main_page import AdminMainPage
-from locators.add_product_page import AddProductPage
-from page_objects.admin_login_page import AdminLoginPageObject
+from page_objects.admin_main_page import AdminMainPageObject
+from page_objects.admin_edit_product_page import AdminEditProductPage
 
 
 class TestAdminProductCrud:
     """ Test Product crud operations
     """
 
-    def test_admin_add_product_with_only_required_fields(self, browser, create_product):
+    def test_admin_add_product_with_only_required_fields(self, driver, create_product):
         """ test creation of product when only required fields are filled
         """
-        wait = WebDriverWait(browser.driver, 10)
-        AdminLoginPageObject(browser).admin_page_login(login="user", password="bitnami1")
-        element = wait.until(EC.element_to_be_clickable((By.XPATH, AdminMainPage.success_alert)))
-        assert str(element.text).startswith("Success: You have modified products!")
+        AdminMainPageObject(driver).admin_check_success_alert()
 
-    def test_edit_product(self, app, admin_session, create_product):
+    def test_edit_product(self, driver, create_product):
         """ test edit product
         """
-        wait = WebDriverWait(app.wd, 10)
         name = create_product
         new_meta = f"test_edit_meta_{randint(1, 1000)}"
-        app.admin_find_product_by_name(name)
-        element = app.wd.find_element_by_xpath(AdminMainPage.found_product_edit_button)
-        element.click()
-        element = app.wd.find_element_by_css_selector(AddProductPage.product_meta)
-        element.click()
-        element.clear()
-        element.send_keys(new_meta)
-        element = app.wd.find_element_by_css_selector(AddProductPage.save_button)
-        element.click()
+        AdminMainPageObject(driver).admin_find_product_by_name(name)
+        AdminMainPageObject(driver).admin_edit_product_click()
+        AdminEditProductPage(driver).fill_product_meta(new_meta)
+        AdminEditProductPage(driver).save_product_button_click()
+        AdminMainPageObject(driver).admin_check_success_alert()
 
-        element = wait.until(EC.element_to_be_clickable((By.XPATH, AdminMainPage.success_alert)))
-        assert str(element.text).startswith("Success: You have modified products!")
-
-    def test_delete_product(self, app, admin_session):
+    def test_delete_product(self, driver, admin_page):
         """ test delete product
         """
-        wait = WebDriverWait(app.wd, 10)
-        app.admin_open_product_creation()
-        name = app.admin_create_product()
-        app.admin_find_product_by_name(name)
-        element = app.wd.find_element_by_xpath(AdminMainPage.found_product_select_button)
-        element.click()
-        element = app.wd.find_element_by_css_selector(AdminMainPage.delete_button)
-        element.click()
-        app.wd.switch_to_alert().accept()
-        element = wait.until(EC.element_to_be_clickable((By.XPATH, AdminMainPage.success_alert)))
-        assert str(element.text).startswith("Success: You have modified products!")
+        name = AdminMainPageObject(driver).admin_create_product()
+        AdminMainPageObject(driver).admin_find_product_by_name(name)
+        AdminMainPageObject(driver).admin_found_product_select_click()
+        AdminMainPageObject(driver).admin_delete_button_click()
+        driver.switch_to_alert().accept()
+        AdminMainPageObject(driver).admin_check_success_alert()
+
+
+@pytest.fixture()
+def create_product(driver, admin_page):
+    name = AdminMainPageObject(driver).admin_create_product()
+    yield name
+    AdminMainPageObject(driver).admin_delete_product(name)
 

@@ -1,12 +1,12 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from locators import MainPage
+from .base_page import BasePage
 
 
-class MainPageObject:
-
-    def __init__(self, driver):
-        self.driver = driver
+class MainPageObject(BasePage):
+    """
+    """
 
     def click_logo(self):
         element = self.driver.find_element_by_css_selector(MainPage.logo)
@@ -28,4 +28,4 @@ class MainPageObject:
         desktops_link = self.driver.find_element_by_link_text("Components")
         ActionChains(self.driver).move_to_element(desktops_link).pause(2).perform()
         self.driver.find_element_by_partial_link_text(category_name).click()
-        # self.driver.find_element_by_partial_link_text("Monitors")
+
