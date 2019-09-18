@@ -8,6 +8,4 @@ def test_upload_file(driver, admin_page):
     filename = os.path.join(dirname, 'Z7pqKcPxxsg.jpg')
     DownloadsPage(driver).admin_open_downloads_page()
     DownloadsPage(driver).admin_upload_file("name", filename)
-
-
     time.sleep(10)

@@ -30,4 +30,21 @@ class DownloadsPage(BasePage):
         input_manager.send_keys(filename)
         element = self.driver.find_element_by_css_selector("#input-mask")
         element.send_keys(filename)
-        self.driver.find_element_by_css_selector("button[type='submit']").click()
+        # self.driver.find_element_by_css_selector("button[type='submit']").click()
+        self.driver.execute_script("""
+            var f = document.createElement("form");
+            f.id = "form-upload";
+            f.style.display = "block";
+            f.enctype = "multipart/form-data";
+            inp = document.createElement("input");
+            inp.type = "file";
+            inp.name = "file";
+            f.appendChild(inp);
+            body = document.getElementsByTagName("body")[0];
+            body.insertBefore(f, body.firstChild);
+        """)
+        self.driver.execute_script("""
+            document.getElementById('button-upload').click()
+        """)
+
+
