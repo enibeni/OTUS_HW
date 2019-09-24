@@ -7,6 +7,7 @@ from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriv
 from browsermobproxy import Server
 from page_objects.admin_login_page import AdminLoginPageObject
 from log_helper import SessionLogger, MyListener
+from selenium import webdriver
 
 
 def pytest_addoption(parser):
@@ -40,7 +41,10 @@ def driver(request, logger, proxy):
         chrome_options.add_experimental_option('w3c', False)
         # chrome_options.add_argument("--start-fullscreen")
         # chrome_options.add_argument("--headless")
-        driver = EventFiringWebDriver(Chrome(options=chrome_options), MyListener(logger))
+        # driver = EventFiringWebDriver(Chrome(options=chrome_options), MyListener(logger))
+        driver = webdriver.Remote(
+            "http://localhost:4444/wd/hub",
+            desired_capabilities={'browserName': 'chrome'})
     elif browser == 'firefox':
         driver = Firefox()
     elif browser == 'safari':
