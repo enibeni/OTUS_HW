@@ -1,6 +1,7 @@
 import os
 import pytest
 import logging
+import platform
 from selenium.webdriver import Chrome, Firefox, Safari
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
@@ -41,10 +42,10 @@ def driver(request, logger, proxy):
         chrome_options.add_experimental_option('w3c', False)
         # chrome_options.add_argument("--start-fullscreen")
         # chrome_options.add_argument("--headless")
-        # driver = EventFiringWebDriver(Chrome(options=chrome_options), MyListener(logger))
-        driver = webdriver.Remote(
-            "http://localhost:4444/wd/hub",
-            desired_capabilities={'browserName': 'chrome'})
+        driver = EventFiringWebDriver(Chrome(options=chrome_options), MyListener(logger))
+        # driver = webdriver.Remote(
+        #     "http://localhost:4444/wd/hub",
+        #     desired_capabilities={'browserName': 'chrome'})
     elif browser == 'firefox':
         driver = Firefox()
     elif browser == 'safari':
@@ -99,6 +100,29 @@ def logs_setup_teardown(logger):
     logger.debug('===== New test session ====')
     yield
     logger.debug('==== End of test session ====')
+
+
+@pytest.mark.usefixtures("environment_info")
+@pytest.fixture(scope='session', autouse=True)
+def configure_html_report_env(request, environment_info):
+    python_version, system, os_platform = environment_info
+    request.config._metadata.update(
+        {"browser": request.config.getoption("--browser"),
+         "address": request.config.getoption("--url"),
+         "python_version": python_version,
+         "system": system,
+         "os_platform": os_platform,
+         })
+    yield
+
+
+@pytest.fixture(scope="session")
+def environment_info():
+    os_platform = platform.platform()
+    python_version = platform.python_version()
+    system = platform.system()
+    return python_version, system, os_platform
+
 
 
 
