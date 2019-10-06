@@ -1,19 +1,23 @@
 import pytest
+import allure
 from page_objects.main_page import MainPageObject
 from page_objects.product_page_object import ProductPageObject
 from page_objects.search_result_page import SearchResultPageObject
 
 
+@allure.feature('Main page')
 class TestMainPage:
     """ Test Main Page
     """
 
+    @allure.story('main page test')
     @pytest.mark.skip()
     def test_home_page(self, driver, main_page):
         """ check home page title
         """
         assert driver.title == "Your Store"
 
+    @allure.story('main page test')
     @pytest.mark.webtest
     def test_add_to_cart_success_alert(self, driver, main_page):
         """ test success alert when add product to cart
@@ -22,6 +26,7 @@ class TestMainPage:
         ProductPageObject(driver).add_product_to_cart()
         ProductPageObject(driver).check_success_alert("Success: You have added")
 
+    @allure.story('main page test')
     @pytest.mark.webtest
     def test_add_to_comparison_success_alert(self, driver, main_page):
         """ test success alert when add product to comparison
@@ -30,6 +35,7 @@ class TestMainPage:
         ProductPageObject(driver).add_product_to_cart()
         ProductPageObject(driver).check_success_alert("Success: You have added")
 
+    @allure.story('main page test')
     @pytest.mark.webtest
     def test_search_input_and_click(self, driver, main_page):
         """ test search input
@@ -38,6 +44,7 @@ class TestMainPage:
         MainPageObject(driver).search_by_text(text_to_search)
         SearchResultPageObject(driver).check_search_query(text_to_search)
 
+    @allure.story('main page test')
     @pytest.mark.xfail(reason="Wrong expression to search")
     def test_open_product_category(self, driver, main_page):
         """ test open product category

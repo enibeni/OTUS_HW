@@ -1,18 +1,22 @@
 import pytest
+import allure
 from random import randint
 from page_objects.admin_main_page import AdminMainPageObject
 from page_objects.admin_edit_product_page import AdminEditProductPage
 
 
+@allure.feature('Admin page')
 class TestAdminProductCrud:
     """ Test Product crud operations
     """
 
+    @allure.story('admin page test')
     def test_admin_add_product_with_only_required_fields(self, driver, create_product):
         """ test creation of product when only required fields are filled
         """
         AdminMainPageObject(driver).admin_check_success_alert()
 
+    @allure.story('admin page test')
     def test_edit_product(self, driver, create_product):
         """ test edit product
         """
@@ -24,6 +28,7 @@ class TestAdminProductCrud:
         AdminEditProductPage(driver).save_product_button_click()
         AdminMainPageObject(driver).admin_check_success_alert()
 
+    @allure.story('admin page test')
     def test_delete_product(self, driver, admin_page):
         """ test delete product
         """
