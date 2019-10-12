@@ -110,8 +110,8 @@ if __name__ == "__main__":
         requests_count = get_requests_count(logs)
         report[file]["Total sum of requests"] = requests_count
 
-        methods = get_requests_type_count(logs)
-        report[file]["Requests count by type"] = methods
+        request_types = get_requests_type_count(logs)
+        report[file]["Requests count by type"] = request_types
 
         requests_ip = get_top_request_ip_addresses(logs)
         report[file]["Top requests by ip"] = requests_ip
