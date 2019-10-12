@@ -122,8 +122,7 @@ if __name__ == "__main__":
         server_errors = get_top_errors(logs, error_type=5)
         report[file]["Top server errors requests"] = server_errors
 
-        save_json_report(report)
-
+    save_json_report(report)
     print(json.dumps(report, indent=4))
 
 
