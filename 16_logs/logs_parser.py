@@ -6,16 +6,6 @@ import json
 from collections import defaultdict, OrderedDict
 
 
-def get_requests_type_summary(file):
-    dict_type = defaultdict(int)
-    for line in file:
-        regex = r"\"(POST|GET|PUT|DELETE|HEAD)"
-        match = re.search(regex, line)
-        if match:
-            dict_type[match.group(0)] += 1
-    return dict_type
-
-
 def get_requests_count(file):
     requests_count = 0
     for line in file:
@@ -23,6 +13,16 @@ def get_requests_count(file):
         if re.search(regex, line):
             requests_count += 1
     return requests_count
+
+
+def get_requests_type_count(file):
+    type_count = defaultdict(int)
+    for line in file:
+        regex = r"\"(POST|GET|PUT|DELETE|HEAD)"
+        match = re.search(regex, line)
+        if match:
+            type_count[match.group(0)] += 1
+    return type_count
 
 
 def get_top_request_ip_addresses(file, count_to_show=10):
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         requests_count = get_requests_count(log_file)
         report[file]["Total sum of requests"] = requests_count
 
-        methods = get_requests_type_summary(log_file)
+        methods = get_requests_type_count(log_file)
         report[file]["Requests count by type"] = methods
 
         requests_ip = get_top_request_ip_addresses(log_file)
