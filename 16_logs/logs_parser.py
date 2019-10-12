@@ -103,23 +103,23 @@ if __name__ == "__main__":
         log_files.append(args.file)
 
     for file in log_files:
-        file_content = load_logs_file(file)
-        if file_content is None:
+        logs = load_logs_file(file)
+        if logs is None:
             sys.exit("File not found")
 
-        requests_count = get_requests_count(file_content)
+        requests_count = get_requests_count(logs)
         report[file]["Total sum of requests"] = requests_count
 
-        methods = get_requests_type_count(file_content)
+        methods = get_requests_type_count(logs)
         report[file]["Requests count by type"] = methods
 
-        requests_ip = get_top_request_ip_addresses(file_content)
+        requests_ip = get_top_request_ip_addresses(logs)
         report[file]["Top requests by ip"] = requests_ip
 
-        client_errors = get_top_errors(file_content, error_type=4)
+        client_errors = get_top_errors(logs, error_type=4)
         report[file]["Top client errors requests"] = client_errors
 
-        server_errors = get_top_errors(file_content, error_type=5)
+        server_errors = get_top_errors(logs, error_type=5)
         report[file]["Top server errors requests"] = server_errors
 
         save_json_report(report)
