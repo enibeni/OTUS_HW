@@ -9,8 +9,8 @@ secret = 'root'
 port = 32772
 
 
-def test_ssh_connection(http_server):
-    client = http_server
+def test_ssh_connection(ssh_client):
+    client = ssh_client
     client.exec_command('echo "Hello, world." > test.html')
     client.exec_command('python3 -m http.server 8888')
     time.sleep(5)  # ожидаем поднятия http.server
@@ -20,7 +20,7 @@ def test_ssh_connection(http_server):
 
 
 @pytest.fixture
-def http_server():
+def ssh_client():
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(hostname=host, username=user, password=secret, port=port)
