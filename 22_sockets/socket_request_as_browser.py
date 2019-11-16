@@ -29,15 +29,24 @@ def send_request(method="GET", protocol_version="HTTP/1.1", url="", port=443, pa
     return sock
 
 
-def print_socket_content(sock):
-    result = sock.recv(4096)
-    while len(result) > 0:
-        print(result)
-        result = sock.recv(4096)
+def get_socket_content(sock):
+    socket_content = sock.recv(4096)
+    while True:
+        socket_content += sock.recv(4096)
+        if "</html>" in str(socket_content):
+            break
+    return socket_content
 
 
 if __name__ == "__main__":
     sock = send_request(url="yandex.ru", port=443)
-    print_socket_content(sock)
+    socket_content = get_socket_content(sock)
+    print(socket_content)
     sock.close()
+    # parser = MyHTMLParser()
+    # parser.feed(str(result))
+    # выводить на экран список:
+    # тегов и их названия, текст,
+    # самый частовстречающийся тег,
+    # список ссылок и картинок на странице
 
