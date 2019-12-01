@@ -3,6 +3,6 @@ python: 3.7
 dist: xenial
 sudo: true
 script:
-    - pip install pipenv
-    - pipenv install --ignore-pipfile
-    - pipenv run pytest
+    - pip3 install --upgrade pip
+    - pip3 install -r requirements.txt
+    - python3 -m pytest --url=https://api.openbrewerydb.org/breweries 03_api/test_brewery_api.py
