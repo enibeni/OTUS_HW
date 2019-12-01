@@ -1,3 +1,5 @@
+https://travis-ci.org/enibeni/OTUS_HW.svg?branch=master
+
 # otus-hw
 
 Just some pytest tests
